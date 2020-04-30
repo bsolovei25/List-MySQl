@@ -315,7 +315,7 @@ document.getElementById('addNewTodoList').addEventListener('click',function(){
   div8.appendChild(ul1);
 })
 
-window.onload = function(){
+/*window.onload = function(){
   if (JSON.parse(localStorage.getItem('objSave')) != null){
       sessionObj = JSON.parse(localStorage.getItem('objSave'));
   }
@@ -520,7 +520,7 @@ window.onload = function(){
   div6.appendChild(div8);
   div8.appendChild(ul1);
   }   
-};
+};*/
 </script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

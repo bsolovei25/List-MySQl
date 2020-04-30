@@ -148,7 +148,7 @@ document.getElementById('addNewTodoList').addEventListener('click',function(){
   });
 
   i1.addEventListener('click',function(event){
-    body.removeChild(event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement);
+    body.removeChild(event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement)
   });  
 
   button1.addEventListener('click',function(){

@@ -287,7 +287,7 @@ document.getElementById('addNewTodoList').addEventListener('click',function(){
       arrofProjects.push(prodobj);
   }
   
-  localStorage.setItem('objSave',JSON.stringify(arrofProjects));
+  //localStorage.setItem('objSave',JSON.stringify(arrofProjects));
   })
 
   var div8 = document.createElement('div');

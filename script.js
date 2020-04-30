@@ -267,13 +267,13 @@ document.getElementById('addNewTodoList').addEventListener('click',function(){
   lidiv.appendChild(i4);
 
   var ok = true;
-  if (JSON.parse(localStorage.getItem('objSave')) != null && arrofProjects.length == 0){
+  /*if (JSON.parse(localStorage.getItem('objSave')) != null && arrofProjects.length == 0){
       let tmp = JSON.parse(localStorage.getItem('objSave'));
       for (let i =0;i<tmp.length;i++){
           arrofProjects.push(tmp[i]);
       }
       localStorage.clear();
-  }
+    }*/
   for (let i =0;i <arrofProjects.length;i++ )
   {
       if (arrofProjects[i].id == prodobj.id)

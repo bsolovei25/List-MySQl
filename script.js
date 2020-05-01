@@ -180,7 +180,11 @@ document.getElementById('addNewTodoList').addEventListener('click',function(){
   i3.style.marginRight = "40px";
   i4.style.display = "none";
   i3.style.display = "none";
-
+	
+	i3.addEventListener('click',function(event){
+        ul1.removeChild(event.target.parentElement.parentElement);
+    });
+	
   var i5 = document.createElement('i');
   i5.setAttribute("class", "fa fa-sort float-right");
   i5.setAttribute("aria-hidden", "true");
@@ -244,9 +248,9 @@ document.getElementById('addNewTodoList').addEventListener('click',function(){
           return;
       });
   
-      i3.addEventListener('click',function(event){
+      /*i3.addEventListener('click',function(event){
           ul1.removeChild(event.target.parentElement.parentElement);
-      }); 
+      });*/ 
   });
 
   lidiv.addEventListener('mouseout',function(event){

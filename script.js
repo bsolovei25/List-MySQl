@@ -319,6 +319,10 @@ document.getElementById('addNewTodoList').addEventListener('click',function(){
   div8.appendChild(ul1);
 })
 
+window.onload = function(){
+    alert('!');
+}
+
 /*window.onload = function(){
   if (JSON.parse(localStorage.getItem('objSave')) != null){
       sessionObj = JSON.parse(localStorage.getItem('objSave'));

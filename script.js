@@ -90,9 +90,32 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 
-app.post('/save',(req, res) => {
-  let data = {tasks_checked: req.body.product_name, tasks_name: req.body.product_price};
+app.post('/addTask',(req, res) => {
+  let data = {id_tasks: req.body.dbtask_projid,tasks_name:req.body.dbtask_name,projecttask_id:req.body.dbtask_projecttask_id,tasks_checked:req.body.dbtask_checked};
   let sql = "INSERT INTO tasks SET ?";
+  let query = conn.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.redirect('/');
+  });
+});
+
+
+app.post('/changeCheck',(req, res) => {
+  let info = req.body.checkedvalue;
+  info = info == 1?0:1;
+  let sql = "UPDATE tasks SET tasks_checked='"+info+"' WHERE id_tasks="+req.body.id;
+  let query = conn.query(sql,(err, results) => {
+    if(err) throw err;
+    res.redirect('/');
+  });
+});
+
+
+
+
+app.post('/save',(req, res) => {
+  let data = {proj_name: req.body.dbproject_name};
+  let sql = "INSERT INTO project SET ?";
   let query = conn.query(sql, data,(err, results) => {
     if(err) throw err;
     res.redirect('/');
@@ -101,7 +124,7 @@ app.post('/save',(req, res) => {
  
 
 app.post('/update',(req, res) => {
-  let sql = "UPDATE tasks SET name='"+req.body.product_name+"', address='"+req.body.product_price+"' WHERE id="+req.body.id;
+  let sql = "UPDATE tasks SET tasks_name='"+req.body.dbtask_name+"', tasks_checked='"+req.body.dbtask_checked+"' WHERE id_tasks="+req.body.id;
   let query = conn.query(sql, (err, results) => {
     if(err) throw err;
     res.redirect('/');
@@ -110,7 +133,7 @@ app.post('/update',(req, res) => {
 
 
 app.post('/delete',(req, res) => {
-  let sql = "DELETE FROM tasks WHERE id="+req.body.taskdb_id+"";
+  let sql = "DELETE FROM tasks WHERE id_tasks="+req.body.taskdb_id+"";
   let query = conn.query(sql, (err, results) => {
     if(err) throw err;
       res.redirect('/');

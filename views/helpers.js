@@ -32,7 +32,11 @@
     getGlobal: function() {
       return PN;
       //return ' va1 = '+value1+' ty va1 = '+typeof value1+' ||| va2 = '+ value2+' ty va2 =  '+typeof value2+' |||';
-  }
+    },
+    reCheck: function(val) {
+      return val == 1 ? 'checked' :'';
+    //return ' va1 = '+value1+' ty va1 = '+typeof value1+' ||| va2 = '+ value2+' ty va2 =  '+typeof value2+' |||';
+    }
 };
 
 if (Handlebars && typeof Handlebars.registerHelper === "function") {

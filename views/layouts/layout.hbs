@@ -2,9 +2,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="utf-8">
     <title>CRUD Node.js and Mysql</title>
+    
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
   <script type='text/javascript' src='./views/handlebars-v4.7.6.js'></script>
    <script type='text/javascript' src='./views/helpers.js'></script>
@@ -18,68 +21,37 @@
     <h2 class = 'text-center'>Product List</h2>
         <button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Add New</button>
     {{#each project}}
+    {{setGlobal project_id}}
     <table class="table table-striped" id="mytable">
       <thead>
         <tr>
-          <th>Checked</th>
-          <th>Id</th>
-          <th>TaskName</th>
+          <th>Complete</th>
+          <th class="styleforth" style="margin-left: 30px;">TaskName</th>
+          <th><a href="javascript:void(0);" class="btn btn-success addnewTask" data-toggle="modal" data-target="#myNewTaskAdd" data-id="{{ getGlobal }}">Add New Task</a></th>
         </tr>
       </thead>
       <tbody>
-        {{setGlobal project_id}}
         {{#each ../task}}
         {{#if (isProject projecttask_id)}}
         <tr>
           <td>
             <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1" checked>
+            <input type="checkbox" class="form-check-input checkBox" id="exampleCheck1" data-id="{{ id_tasks }}" data-checked="{{ tasks_checked }}" {{reCheck tasks_checked}}>
           </div>  
-          <td>
-          <td>{{ tasks_checked }}</td>
-          <td>{{ id_tasks }}</td>
+          
           <td>{{ tasks_name }}</td>
           <td>
-            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{id_tasks}}" data-product_name="{{ tasks_name }}" data-product_price="{{ tasks_checked }}">Edit</a>
+             <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{id_tasks}}" data-product_name="{{ tasks_name }}" data-product_price="{{ tasks_checked }}">Edit</a>
             <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ id_tasks }}">Delete</a>
           </td>
-        </tr>
+          </td>
+        
         {{/if}}
       {{/each}}
       </tbody>
     </table>
     {{/each}}
   </div>
- 
-
-    <!-- Modal Add Product-->
-      <form action="/save" method="post">
-        <div class="modal" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-         <div class="modal-dialog" role="document">
-           <div class="modal-content">
-             <div class="modal-header">
-               <h5 class="modal-title" id="exampleModalLabel">Add New Product</h5>
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                 <span aria-hidden="true">&times;</span>
-               </button>
-             </div>
-             <div class="modal-body">
-               <div class="form-group">
-                   <input type="text" name="dbtask_name" class="form-control" placeholder="Product Name" required>
-               </div>
- 
-               <div class="form-group">
-                   <input type="text" name="dbtask_price" class="form-control" placeholder="Price" required>
-               </div>
-             </div>
-             <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-               <button type="submit" class="btn btn-primary">Save</button>
-             </div>
-           </div>
-         </div>
-        </div>
-     </form>
  
      <!-- Modal Update Product-->
    <form action="/update" method="post">
@@ -94,11 +66,11 @@
             </div>
             <div class="modal-body">
               <div class="form-group">
-                  <input type="text" name="dbtask_name" class="form-control product_name" placeholder="Product Name" required>
+                  <input type="text" name="dbtask_name" class="form-control product_name" placeholder="Task Name" required>
               </div>
  
               <div class="form-group">
-                  <input type="text" name="dbtask_price" class="form-control price" placeholder="Price" required>
+                  <input type="text" name="dbtask_checked" class="form-control price" placeholder="Tasks Checked" required>
               </div>
             </div>
             <div class="modal-footer">
@@ -110,6 +82,68 @@
         </div>
        </div>
   </form>
+
+
+    <form action="/save" method="post">
+        <div class="modal" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLabel">Add New Product</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+               </button>
+             </div>
+             <div class="modal-body">
+               <div class="form-group">
+                   <input type="text" name="dbproject_name" class="form-control" placeholder="Project Name" required>
+               </div>
+ 
+               
+             </div>
+             <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               <button type="submit" class="btn btn-primary">Save</button>
+             </div>
+           </div>
+         </div>
+        </div>
+     </form>
+
+
+    <!-- Modal Add Product-->
+      <form action="/addTask" method="post">
+        <div class="modal" id="myModalAddNewTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLabel">Add New Task</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+               </button>
+             </div>
+             <div class="modal-body">
+               
+               <div class="form-group">
+                   <input type="text" name="dbtask_name" class="form-control" placeholder="Tasks Name" required>
+               </div>
+                <div class="form-group">
+                   <input type="text" name="dbtask_projecttask_id" class="form-control FKClassName" placeholder="PTid Name" required readonly>
+               </div>
+               <div class="form-group">
+                   <input type="text" name="dbtask_checked" class="form-control" placeholder="Task id Cheched" required>
+               </div>
+             </div>
+             <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               <button type="submit" class="btn btn-primary">Save</button>
+             </div>
+           </div>
+         </div>
+        </div>
+     </form>
+ 
+
  
      <!-- Modal Delete Product-->
       <form id="add-row-form" action="/delete" method="post">
@@ -124,7 +158,7 @@
                                                  <strong>Are you sure to delete this data?</strong>
                    </div>
                    <div class="modal-footer">
-                                            <input type="hidden" name="taskdb_id" class="form-control product_id2" required>
+                        <input type="hidden" name="taskdb_id" class="form-control product_id2" required>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-success">Delete</button>
                    </div>
@@ -132,6 +166,34 @@
             </div>
          </div>
      </form>
+
+
+    <form id="add-row-form" action="/changeCheck" method="post">
+         <div class="modal" id="changeCheckModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header">
+                      <h5 class="modal-title" id="myModalLabel">checkBox Change</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   </div>
+                   <div class="modal-body">
+                    <strong>Are you sure to want change value of checkbox?</strong>
+                    <div class="form-group">
+                      <input type="text" name="checkedvalue" class="form-control valueofChecked" placeholder="checked val" required readonly>
+                    </div>
+                   </div>
+                   <div class="modal-footer">
+                        <input type="hidden" name="id" class="checked_id">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Change</button>
+                   </div>
+                    </div>
+            </div>
+         </div>
+     </form>
+    
+
+
  
 <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
   <!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
@@ -148,7 +210,8 @@
     $(document).ready(function(){
             //showing data to edit modal      
             //<a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{id}}" data-product_name="{{ name }}" data-product_price="{{ address }}">Edit</a>
-        $('#mytable').on('click','.edit',function(){
+        //$('#mytable').on('click','.edit',function(){
+        $('.table-striped').on('click','.edit',function(){
         var product_id = $(this).data('id');
         var product_name = $(this).data('product_name');
         var product_price = $(this).data('product_price');
@@ -161,11 +224,26 @@
         $('.product_id').val(product_id);
       });
             //showing delete record modal
-            $('#mytable').on('click','.delete',function(){
+            $('.table-striped').on('click','.delete',function(){
         var product_id = $(this).data('id');
         $('#DeleteModal').modal('show');
         $('.product_id2').val(product_id);
       });
+      $('.table-striped').on('click','.addnewTask',function(){
+        var product_id = $(this).data('id');
+        $('#myModalAddNewTask').modal('show');
+        $('.FKClassName').val(product_id);
+      });
+      $('.table-striped').on('click','.checkBox',function(){
+        var task_checked = $(this).data('checked'); 
+        var task_id = $(this).data('id');
+        $('#changeCheckModal').modal('show');
+        $('.valueofChecked').val(task_checked);
+        $('.checked_id').val(task_id);
+        
+      });
+      
+
  });
 
 </script>

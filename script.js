@@ -28,12 +28,21 @@ var async = require('async');
 //var expressHbs =  require('express-handlebars');
 //var hbss = expressHbs.create({});
 
-var conn = mysql.createConnection({
+/*var conn = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "root",
   database:"reminder_db"//todo remider_db
+});*/
+
+var conn = mysql.createConnection({
+  host: "us-cdbr-east-05.cleardb.net",
+  user: "b83b32fb126a4b",
+  password: "733112cf",
+  database:"heroku_9b103bb46b3ba06"
 });
+
+
 
 /*hbss.handlebars.registerHelper("isProject", function(value1,value2) {
   return value1 == value2;

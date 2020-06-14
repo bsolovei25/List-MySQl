@@ -35,7 +35,8 @@ var async = require('async');
   database:"reminder_db"//todo remider_db
 });*/
 
-var conn = mysql.createConnection({
+var pool = mysql.createPool({
+  connectionLimit : 10,
   host: "us-cdbr-east-05.cleardb.net",
   user: "b83b32fb126a4b",
   password: "733112cf",
@@ -87,10 +88,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
+
   app.get('/',(req, res) => {
-    conn.query("SELECT * FROM project", function(err, result1) {
-      conn.query("SELECT * FROM tasks", function(err, result2) {
-        conn.query("select Count(project_id) FROM project;", function(err, result3) {
+    pool.query("SELECT * FROM project", function(err, result1) {
+      pool.query("SELECT * FROM tasks", function(err, result2) {
+        pool.query("select Count(project_id) FROM project;", function(err, result3) {
         res.render('index', { project : result1, task: result2,counter: result3});
       });
       });
@@ -102,7 +104,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.post('/addTask',(req, res) => {
   let data = {id_tasks: req.body.dbtask_projid,tasks_name:req.body.dbtask_name,projecttask_id:req.body.dbtask_projecttask_id,tasks_checked:req.body.dbtask_checked};
   let sql = "INSERT INTO tasks SET ?";
-  let query = conn.query(sql, data,(err, results) => {
+  let query = pool.query(sql, data,(err, results) => {
     if(err) throw err;
     res.redirect('/');
   });
@@ -113,7 +115,7 @@ app.post('/changeCheck',(req, res) => {
   let info = req.body.checkedvalue;
   info = info == 1?0:1;
   let sql = "UPDATE tasks SET tasks_checked='"+info+"' WHERE id_tasks="+req.body.id;
-  let query = conn.query(sql,(err, results) => {
+  let query = pool.query(sql,(err, results) => {
     if(err) throw err;
     res.redirect('/');
   });
@@ -125,7 +127,7 @@ app.post('/changeCheck',(req, res) => {
 app.post('/save',(req, res) => {
   let data = {proj_name: req.body.dbproject_name};
   let sql = "INSERT INTO project SET ?";
-  let query = conn.query(sql, data,(err, results) => {
+  let query = pool.query(sql, data,(err, results) => {
     if(err) throw err;
     res.redirect('/');
   });
@@ -134,7 +136,7 @@ app.post('/save',(req, res) => {
 
 app.post('/update',(req, res) => {
   let sql = "UPDATE tasks SET tasks_name='"+req.body.dbtask_name+"', tasks_checked='"+req.body.dbtask_checked+"' WHERE id_tasks="+req.body.id;
-  let query = conn.query(sql, (err, results) => {
+  let query = pool.query(sql, (err, results) => {
     if(err) throw err;
     res.redirect('/');
   });
@@ -143,7 +145,7 @@ app.post('/update',(req, res) => {
 
 app.post('/delete',(req, res) => {
   let sql = "DELETE FROM tasks WHERE id_tasks="+req.body.taskdb_id+"";
-  let query = conn.query(sql, (err, results) => {
+  let query = pool.query(sql, (err, results) => {
     if(err) throw err;
       res.redirect('/');
   });

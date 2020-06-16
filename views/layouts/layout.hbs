@@ -6,13 +6,14 @@
     <meta charset="utf-8">
     <title>CRUD Node.js and Mysql</title>
     
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
   
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
-  
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 <!-- BS JavaScript -->
-<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
   <script type='text/javascript' src='./views/handlebars-v4.7.6.js'></script>
    <script type='text/javascript' src='./views/helpers.js'></script>
 
@@ -222,7 +223,7 @@
 
 
         //$('#EditModal').modal('show');
-        window.$('#EditModal').modal('show');
+        $('#EditModal').modal('show');
         $('.product_name').val(product_name);
         $('.price').val(product_price);
         $('.product_id').val(product_id);
@@ -230,18 +231,18 @@
             //showing delete record modal
             $('.table-striped').on('click','.delete',function(){
         var product_id = $(this).data('id');
-        window.$('#DeleteModal').modal('show');
+        $('#DeleteModal').modal('show');
         $('.product_id2').val(product_id);
       });
       $('.table-striped').on('click','.addnewTask',function(){
         var product_id = $(this).data('id');
-        window.$('#myModalAddNewTask').modal('show');
+        $('#myModalAddNewTask').modal('show');
         $('.FKClassName').val(product_id);
       });
       $('.table-striped').on('click','.checkBox',function(){
         var task_checked = $(this).data('checked'); 
         var task_id = $(this).data('id');
-        window.$('#changeCheckModal').modal('show');
+        $('#changeCheckModal').modal('show');
         $('.valueofChecked').val(task_checked);
         $('.checked_id').val(task_id);
         

@@ -21,22 +21,23 @@
 
   var register = function(Handlebars) {
     var helpers = {
-      isProject: function(value1,value2) {
+      isProject: function(value1) {
+        
         return value1 == global.PN;
         //return ' va1 = '+value1+' ty va1 = '+typeof value1+' ||| va2 = '+ value2+' ty va2 =  '+typeof value2+' |||';
-      },  
-      /*PriorityCheck: function(value1,value2) {
-        return value1 == global.PN;
-        //return ' va1 = '+value1+' ty va1 = '+typeof value1+' ||| va2 = '+ value2+' ty va2 =  '+typeof value2+' |||';
-      },*/     
+      },
       setGlobal: function(value1) {
+        
         global.PN = value1;
+        //return ' va1 = '+value1+' ty va1 = '+typeof value1+' ||| va2 = '+ value2+' ty va2 =  '+typeof value2+' |||';
     },
     getGlobal: function() {
+      
       return PN;
       //return ' va1 = '+value1+' ty va1 = '+typeof value1+' ||| va2 = '+ value2+' ty va2 =  '+typeof value2+' |||';
     },
     reCheck: function(val) {
+      
       return val == 1 ? 'checked' :'';
     //return ' va1 = '+value1+' ty va1 = '+typeof value1+' ||| va2 = '+ value2+' ty va2 =  '+typeof value2+' |||';
     }

@@ -14,20 +14,42 @@
 
 <!-- BS JavaScript -->
 
-  <script type='text/javascript' src='./views/handlebars-v4.7.6.js'></script>
-   <script type='text/javascript' src='./views/helpers.js'></script>
+  <script type='text/javascript' src='./handlebars-v4.7.6.js'></script>
+   <script type='text/javascript' src='./helpers.js'></script>
 
 <!--<link rel="stylesheet" href="C:\Users\Bogdan\Desktop\ruby\ruby project\font-awesome-4.7.0\css\font-awesome.min.css">-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<style>
+  .buttonsAlign,.addnewTask,.EditProjectStyle{
+    float: right;
+}
+  .ProjNameClass{
+    background-color: cornflowerblue;
+  }
+
+  .table td, .table th {
+    vertical-align: inherit;
+  }
+</style>
 
 </head>
 <body>
   <div class="container">
-    <h2 class = 'text-center'>Product List</h2>
-        <button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Add New</button>
+    <h2 class = 'text-center'>User TODOList</h2>
+        <button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Add New Project</button>
     {{#each project}}
     {{setGlobal project_id}}
+    <table class="table table-striped" id="tableheader">
+      <thead class="ProjNameClass">
+        <th >{{proj_name}}</th>
+        <td class = "EditProjectStyle">
+             <a href="javascript:void(0);" class="btn btn-sm btn-info editProject" data-projid="{{project_id}}" data-projname="{{ proj_name }}" >Edit</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-danger deleteProject" data-projid="{{project_id}}" data-projname="{{ proj_name }}">Delete</a>
+          </td>
+      </thead>
+      </table>
     <table class="table table-striped" id="mytable">
+      <!--<p class="ProjNameClass">{{proj_name}}</p>-->
       <thead>
         <tr>
           <th>Complete</th>
@@ -37,19 +59,27 @@
       </thead>
       <tbody>
         {{#each ../task}}
+        {{isInside}}
         {{#if (isProject projecttask_id)}}
+      
         <tr>
           <td>
             <div class="form-check">
             <input type="checkbox" class="form-check-input checkBox" id="exampleCheck1" data-id="{{ id_tasks }}" data-checked="{{ tasks_checked }}" {{reCheck tasks_checked}}>
           </div>  
-          
+          </td>
           <td>{{ tasks_name }}</td>
-          <td>
-             <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{id_tasks}}" data-product_name="{{ tasks_name }}" data-product_price="{{ tasks_checked }}">Edit</a>
-            <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ id_tasks }}">Delete</a>
+          <td class = "buttonsAlign">
+            <div class="form-group">
+              <input type="text" name="" class="form-control" placeholder="0000-00-00" value="{{task_countdown}}" readonly>
+            </div>
+            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{id_tasks}}" data-product_name="{{ tasks_name }}" data-product_checked="{{ tasks_checked }}" data-product_priority="{{ taskpriority }}" data-product_projecttask = "{{projecttask_id}}" data-product_date="{{ task_countdown }}">Edit</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ id_tasks}}" data-product_name="{{ tasks_name }}" data-product_checked="{{ tasks_checked }}" data-product_priority="{{ taskpriority }}" data-product_projecttask = "{{projecttask_id}}" data-product_date="{{ task_countdown }}">Delete</a>
+            <a href="javascript:void(0);" class="btn btn-warning SetPriority" data-id="{{ id_tasks}} " data-product_name="{{ tasks_name }}" data-product_checked="{{ tasks_checked }}" data-product_priority="{{ taskpriority }}" data-product_projecttask = "{{projecttask_id}}" data-product_date="{{ task_countdown }}">Set priority</a>
           </td>
-          </td>
+          
+          
+        </tr>
         
         {{/if}}
       {{/each}}
@@ -64,22 +94,25 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Edit Project</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
               <div class="form-group">
-                  <input type="text" name="dbtask_name" class="form-control product_name" placeholder="Task Name" required>
+                  <input type="text" name="dbtask_name" class="form-control task_nameclass" placeholder="Task Name" required>
               </div>
  
               <div class="form-group">
-                  <input type="text" name="dbtask_checked" class="form-control price" placeholder="Tasks Checked" required>
+                  <input type="text" name="dbtask_checked" class="form-control task_checkclass" pattern="[0-1]" placeholder="Enter if checkbox being checked - 1 and unchecked - 0" required>
               </div>
+              <div class="form-group">
+                <input type="date" name="dbtask_dateexpire" class="form-control task_dateclass" placeholder="" required>
+            </div>
             </div>
             <div class="modal-footer">
-              <input type="hidden" name="id" class="product_id">
+              <input type="hidden" name="id" class="task_idclass">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Update</button>
             </div>
@@ -133,10 +166,16 @@
                    <input type="text" name="dbtask_name" class="form-control" placeholder="Tasks Name" required>
                </div>
                 <div class="form-group">
-                   <input type="text" name="dbtask_projecttask_id" class="form-control FKClassName" placeholder="PTid Name" required readonly>
+                   <input type="hidden" name="dbtask_projecttask_id" class="form-control FKClassName" placeholder="PTid Name" required readonly>
                </div>
                <div class="form-group">
-                   <input type="text" name="dbtask_checked" class="form-control" placeholder="Task id Cheched" required>
+                   <input type="text" name="dbtask_checked" class="form-control" pattern="[0-1]" placeholder="Enter if checkbox being checked - 1 and unchecked - 0" required>
+               </div>
+               <div class="form-group">
+                   <input type="text" name="dbtask_priority" class="form-control PriorityClass" pattern="[1-3]" placeholder="Please enter Priority from 1-3,Where 3 -max and 1 -min priority" required>
+               </div>
+               <div class="form-group">
+                   <input type="date" name="dbtask_date" class="form-control DateClass" placeholder="" required>
                </div>
              </div>
              <div class="modal-footer">
@@ -148,9 +187,85 @@
         </div>
      </form>
  
-
+    <form action="/SetPriorityList" method="post"><!--Priority-->
+        <div class="modal" id="myModalSetPriority" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLabel">Set The task's priority</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+               </button>
+             </div>
+             <div class="modal-body">            
+                <div class="form-group">
+                   <input type="hidden" name="taskdb_id" class="form-control prioritytask_classname" required readonly>
+                   <input type="hidden" name="projecttaskvalue" class="form-control projecttaskvalueClass" placeholder="project task" required readonly><!--must be hidden eventualy-->
+                   <input type="text" name="dbtask_taskpriority" class="form-control TaskPriorityClass"  pattern="[1-3]" placeholder="Please enter Priority from 1-3,Where 3 -max and 1 -min priority" required>
+               </div>          
+             </div>
+             <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               <button type="submit" class="btn btn-primary">Save</button>
+             </div>
+           </div>
+         </div>
+        </div>
+     </form>
  
-     <!-- Modal Delete Product-->
+<!-- Modal Delete Project-->
+      <form id="add-row-form" action="/deleteProject" method="post">
+         <div class="modal" id="DeleteProjectId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header">
+                      <h5 class="modal-title" id="myModalLabelProject">Delete Project</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   </div>
+                   <div class="modal-body">
+                      <strong>Are you sure to delete this Project?</strong>
+                   </div>
+                   <div class="modal-footer">
+                        <input type="hidden" name="projdb_id" class="form-control projectClass" >
+                        <input type="text" name="projname_id" class="form-control projectnameClass" readonly>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Delete</button>
+                   </div>
+                    </div>
+            </div>
+         </div>
+     </form>
+
+     <!-- Modal Edit Project Name-->
+      <form id="add-row-form" action="/editProject" method="post">
+         <div class="modal" id="EditProjectId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+           <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit Project</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                  <input type="hidden" name="dbproject_id" class="form-control dbprojectid_class" placeholder="Project ID" required readonly>
+              </div>
+ 
+              <div class="form-group">
+                  <input type="text" name="dbproject_name" class="form-control dbprojectname_class" placeholder="Enter New Project Name" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+          </div>
+          </div>
+         </div>
+     </form>
+
+     <!-- Modal Delete Task-->
       <form id="add-row-form" action="/delete" method="post">
          <div class="modal" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -205,40 +320,99 @@
 
 <script>
 
-    
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
 
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+    
+function convert(str) {
+  var date = new Date(str),
+    mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+    day = ("0" + date.getDate()).slice(-2);
+  return [date.getFullYear(), mnth, day].join("-");
+}
     
 
     $(document).ready(function(){
             //showing data to edit modal      
             //<a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{id}}" data-product_name="{{ name }}" data-product_price="{{ address }}">Edit</a>
+            //<a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{id_tasks}}" data-product_name="{{ tasks_name }}" data-product_price="{{ tasks_checked }}">Edit</a>
         //$('#mytable').on('click','.edit',function(){
         $('.table-striped').on('click','.edit',function(){
-        var product_id = $(this).data('id');
-        var product_name = $(this).data('product_name');
-        var product_price = $(this).data('product_price');
-         
+        var task_id = $(this).data('id');
+        var task_name = $(this).data('product_name');
+        var task_checked = $(this).data('product_checked');
+        var task_priorityVal = $(this).data('product_priority');
+        var task_dateVal = $(this).data('product_date');
+        //let dobj = ('2021-01-12');
         
 
 
 
         //$('#EditModal').modal('show');
         $('#EditModal').modal('show');
-        $('.product_name').val(product_name);
-        $('.price').val(product_price);
-        $('.product_id').val(product_id);
+        $('.task_nameclass').val(task_name);
+        $('.task_checkclass').val(task_checked);
+        $('.task_idclass').val(task_id);
+        //$('.task_dateclass').val(task_dateVal);
+        $('.task_dateclass').val(formatDate(task_dateVal));
+        
       });
             //showing delete record modal
-            $('.table-striped').on('click','.delete',function(){
-        var product_id = $(this).data('id');
+        $('.table-striped').on('click','.delete',function(){
+        var task_id = $(this).data('id');
         $('#DeleteModal').modal('show');
-        $('.product_id2').val(product_id);
+        $('.product_id2').val(task_id);
       });
-      $('.table-striped').on('click','.addnewTask',function(){
-        var product_id = $(this).data('id');
+      $('.table-striped').on('click','.addnewTask',function(){//we are here
+        var task_id = $(this).data('id');
         $('#myModalAddNewTask').modal('show');
-        $('.FKClassName').val(product_id);
+        $('.FKClassName').val(task_id);
       });
+
+      //.SetPriority
+      $('.table-striped').on('click','.SetPriority',function(){
+        var task_id = $(this).data('id');
+        var task_name = $(this).data('product_name');
+        var projtask_name = $(this).data('product_projecttask');
+        $('#myModalSetPriority').modal('show');
+        $('.prioritytask_classname').val(task_id);
+        
+        $('.projecttaskvalueClass').val(projtask_name)
+        
+      });
+      //.deleteProject
+      $('.table-striped').on('click','.deleteProject',function(){
+        var project_id = $(this).data('projid');
+        var proj_name = $(this).data('projname');
+        
+        $('#DeleteProjectId').modal('show');
+        $('.projectClass').val(project_id);        
+        $('.projectnameClass').val(proj_name)
+        
+      });
+      //.editProject
+      $('.table-striped').on('click','.editProject',function(){
+        var project_id = $(this).data('projid');
+        var proj_name = $(this).data('projname');
+        
+        $('#EditProjectId').modal('show');
+        $('.dbprojectid_class').val(project_id);        
+        $('.dbprojectname_class').val(proj_name)
+        
+      });
+
+      
+
       $('.table-striped').on('click','.checkBox',function(){
         var task_checked = $(this).data('checked'); 
         var task_id = $(this).data('id');
